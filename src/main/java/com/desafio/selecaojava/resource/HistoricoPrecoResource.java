@@ -1,16 +1,13 @@
 package com.desafio.selecaojava.resource;
 
+import com.desafio.selecaojava.domain.EstadoEnum;
 import com.desafio.selecaojava.domain.HistoricoPreco;
-import com.desafio.selecaojava.exception.ExtracaoNaoFinalizadaException;
-import com.desafio.selecaojava.exception.GravacaoDeDadosNaoFinalizadaException;
 import com.desafio.selecaojava.resource.dto.ValorDTO;
 import com.desafio.selecaojava.service.HistoricoPrecoService;
-import com.desafio.selecaojava.service.ImportService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/historicos")
@@ -81,8 +78,9 @@ public class HistoricoPrecoResource extends GenericResourceImpl<HistoricoPreco> 
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/municipio/compra-venda")
-    public ResponseEntity<ValorDTO> calcularPrecoMedioCompraEVendaPorMunicipio(@RequestParam("municipio") String municipio) {
-        ValorDTO valorDTO = historicoPrecoService.calcularPrecoMedioCompraEVendaPorMunicipio(municipio);
+    public ResponseEntity<ValorDTO> calcularPrecoMedioCompraEVendaPorMunicipio(@RequestParam("municipio") String municipio,
+                                                                               @RequestParam("estado") EstadoEnum estado) {
+        ValorDTO valorDTO = historicoPrecoService.calcularPrecoMedioCompraEVendaPorMunicipio(municipio, estado);
         return ResponseEntity.ok(valorDTO);
     }
 

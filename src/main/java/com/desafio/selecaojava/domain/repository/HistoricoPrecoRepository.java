@@ -12,7 +12,8 @@ import java.util.List;
 
 public interface HistoricoPrecoRepository extends GenericRepository<HistoricoPreco> {
 
-    List<HistoricoPreco> findAllByRevendedorIn(List<Revendedor> revendedores);
+    @Query(value = "select avg(hp.valorVenda) as valorVenda from historico_preco hp where hp.revendedor in :revendedores")
+    Double calcularPrecoMedioVendaPorRevendedores(List<Revendedor> revendedores);
 
     Page<HistoricoPreco> findAllByRevendedorIn(List<Revendedor> revendedores,
                                                PageRequest pageRequest);
@@ -21,5 +22,5 @@ public interface HistoricoPrecoRepository extends GenericRepository<HistoricoPre
                                              PageRequest pageRequest);
 
     @Query(value = "select avg(hp.valorCompra) as valorCompra, avg(hp.valorVenda) as valorVenda from historico_preco hp where hp.revendedor in :revendedores")
-    ValorDTO calcularPrecoMedioCompraEVendaPorRevendedores(List<Revendedor> revendedores);
+    Object[] calcularPrecoMedioCompraEVendaPorRevendedores(List<Revendedor> revendedores);
 }

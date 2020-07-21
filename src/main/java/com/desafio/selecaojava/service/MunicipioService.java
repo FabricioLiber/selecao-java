@@ -1,5 +1,6 @@
 package com.desafio.selecaojava.service;
 
+import com.desafio.selecaojava.domain.EstadoEnum;
 import com.desafio.selecaojava.domain.Municipio;
 import com.desafio.selecaojava.domain.repository.MunicipioRepository;
 import org.springframework.stereotype.Service;
@@ -14,11 +15,15 @@ public class MunicipioService extends GenericServiceImpl<Municipio> {
     }
 
     public Municipio pesquisarPorNome(String nome) {
-        return ((MunicipioRepository) this.genericRepository).findByNome(nome);
+        return municipioRepository.findByNome(nome);
     }
 
     public Municipio pesquisarPorRegiao(String regiao) {
-        return ((MunicipioRepository) this.genericRepository).findByRegiao(regiao);
+        return municipioRepository.findByRegiao(regiao);
+    }
+
+    public Municipio pesquisarPorNomeEEstado(String nome, EstadoEnum estado) {
+        return municipioRepository.findByNomeAndEstado(nome, estado);
     }
 
 

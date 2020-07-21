@@ -1,5 +1,6 @@
 package com.desafio.selecaojava.service;
 
+import com.desafio.selecaojava.domain.EstadoEnum;
 import com.desafio.selecaojava.domain.Municipio;
 import com.desafio.selecaojava.domain.Revendedor;
 import com.desafio.selecaojava.domain.repository.RevendedorRepository;
@@ -25,8 +26,13 @@ public class RevendedorService extends GenericServiceImpl<Revendedor> {
         return revendedorRepository.findAllByMunicipio(municipio);
     }
 
+    public List<Revendedor> pesquisarPorNomeEEstadoMunicipio(String nome, EstadoEnum estado) {
+        Municipio municipio = municipioService.pesquisarPorNomeEEstado(nome, estado);
+        return revendedorRepository.findAllByMunicipio(municipio);
+    }
+
     public List<Revendedor> pesquisarPorRegiaoMunicipio(String regiao) {
-        Municipio municipio = municipioService.pesquisarPorNome(regiao);
+        Municipio municipio = municipioService.pesquisarPorRegiao(regiao);
         return revendedorRepository.findAllByMunicipio(municipio);
     }
 

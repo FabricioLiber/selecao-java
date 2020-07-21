@@ -1,5 +1,6 @@
 package com.desafio.selecaojava.service;
 
+import com.desafio.selecaojava.domain.EstadoEnum;
 import com.desafio.selecaojava.domain.HistoricoPreco;
 import com.desafio.selecaojava.domain.Municipio;
 import com.desafio.selecaojava.domain.Revendedor;
@@ -15,6 +16,7 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,14 +35,7 @@ public class HistoricoPrecoService extends GenericServiceImpl<HistoricoPreco> {
 
     public Double calcularMedioPrecoPorMunicipio(String nomeMunicipio) {
         List<Revendedor> revendedores = revendedorService.pesquisarPorNomeMunicipio(nomeMunicipio);
-
-        List<HistoricoPreco> historicoPrecoList = historicoPrecoRepository.findAllByRevendedorIn(revendedores);
-        return historicoPrecoList
-                .stream()
-                .mapToDouble(HistoricoPreco::getValorVenda)
-                .average()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                        "Erro no cálculo do preço médio."));
+        return historicoPrecoRepository.calcularPrecoMedioVendaPorRevendedores(revendedores);
     }
 
     public Page<HistoricoPreco> pesquisarPorRegiao(String regiao,
@@ -85,12 +80,17 @@ public class HistoricoPrecoService extends GenericServiceImpl<HistoricoPreco> {
 
     public ValorDTO calcularPrecoMedioCompraEVendaPorBandeira(String bandeira) {
         List<Revendedor> revendedores = revendedorService.pesquisarPorBandeira(bandeira);
-        return historicoPrecoRepository.calcularPrecoMedioCompraEVendaPorRevendedores(revendedores);
+        return calcularPrecoMedioCompraEVendaPorRevendedores(revendedores);
     }
 
-    public ValorDTO calcularPrecoMedioCompraEVendaPorMunicipio(String municipio) {
-        List<Revendedor> revendedores = revendedorService.pesquisarPorNomeMunicipio(municipio);
-        return historicoPrecoRepository.calcularPrecoMedioCompraEVendaPorRevendedores(revendedores);
+    public ValorDTO calcularPrecoMedioCompraEVendaPorMunicipio(String municipio, EstadoEnum estado) {
+        List<Revendedor> revendedores = revendedorService.pesquisarPorNomeEEstadoMunicipio(municipio, estado);
+        return calcularPrecoMedioCompraEVendaPorRevendedores(revendedores);
     }
 
+    public ValorDTO calcularPrecoMedioCompraEVendaPorRevendedores(List<Revendedor> revendedores) {
+        Object[] resultado = historicoPrecoRepository.calcularPrecoMedioCompraEVendaPorRevendedores(revendedores);
+        Object[] registro = (Object[]) resultado[0];
+        return new ValorDTO((double) registro[0], (double) registro[1]);
+    }
 }
