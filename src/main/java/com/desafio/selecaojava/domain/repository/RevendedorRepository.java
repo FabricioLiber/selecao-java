@@ -10,4 +10,8 @@ public interface RevendedorRepository extends GenericRepository<Revendedor> {
     List<Revendedor> findAllByMunicipio(Municipio municipio);
 
     List<Revendedor> findAllByBandeira(String bandeira);
+
+    List<Revendedor> findAllByNome(String nome);
+
+    List<Revendedor> findAllByCnpj(String cnpj);
 }
