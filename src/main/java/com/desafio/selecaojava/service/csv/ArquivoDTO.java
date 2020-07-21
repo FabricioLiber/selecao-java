@@ -1,4 +1,4 @@
-package com.desafio.selecaojava.domain;
+package com.desafio.selecaojava.service.csv;
 
 import com.opencsv.bean.CsvBindByPosition;
 import lombok.AllArgsConstructor;
